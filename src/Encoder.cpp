@@ -1,7 +1,7 @@
 #include "Encoder.h"
 
-Encoder::Encoder(uint8_t pinA, uint8_t pinB, uint8_t pinBtn, int ticksPerClick)
-    : pinA(pinA), pinB(pinB), pinBtn(pinBtn), ticksPerClick(ticksPerClick) {}
+Encoder::Encoder(uint8_t pinA, uint8_t pinB, uint8_t pinBtn)
+    : pinA(pinA), pinB(pinB), pinBtn(pinBtn){}
 
 void Encoder::begin() {
     pinMode(pinA,   INPUT_PULLUP);
@@ -49,10 +49,8 @@ void Encoder::update() {
         if (logicalPos != lastLogicalPos) {
             lastLogicalPos = logicalPos;
             position       = logicalPos;
+            normalizedPosition = (float)position / MAX_POS;
 
-            // debug
-            // Serial.print("ticks="); Serial.print(encoderTicks);
-            // Serial.print(" pos=");   Serial.println(position);
         }
     }
 
