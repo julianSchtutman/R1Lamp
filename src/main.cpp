@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "Encoder.h"
 #include "GammaCurve.h"
+#include "Composer.h"
 
 const uint8_t PIN_ENC_A   = D5;
 const uint8_t PIN_ENC_B   = D6;
@@ -8,6 +9,12 @@ const uint8_t PIN_BUTTON  = D7;
 
 Encoder enc(PIN_ENC_A, PIN_ENC_B, PIN_BUTTON);  
 GammaCurve gC(2.2f);
+Composer   composer(
+    0.4f,  // coolStart: desde 40% de brillo empieza a entrar el frío
+    0.8f,  // coolEnd:   a 80% ya llegó a su mezcla máxima
+    0.35f, // coolMaxShare: a lo sumo 35% del budget se va al frío
+    1.6f   // coolGamma: entra suave al principio, más decidido al final
+);
 
 void setup() {
     Serial.begin(115200);
@@ -30,9 +37,14 @@ void loop() {
         float normPos = enc.getNormalizedPosition();
         Serial.print("Posicion normalizada: ");
         Serial.println(normPos);
-        float gammaValue = gC.apply(normPos);
+        float brightness = gC.apply(normPos);
         Serial.print("Posicion gamma: ");
-        Serial.println(gammaValue);
+        Serial.println(brightness);
+        LightMix mix     = composer.compose(brightness);
+        Serial.print("Warm: ");
+        Serial.print(mix.warm);
+        Serial.print(" - Cool: ");
+        Serial.println(mix.cool);
     }
 
     if (enc.wasClicked()) {
