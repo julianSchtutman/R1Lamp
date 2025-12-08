@@ -2,6 +2,7 @@
 #include "Encoder.h"
 #include "GammaCurve.h"
 #include "Composer.h"
+#include "PwmMapper.h"
 
 const uint8_t PIN_ENC_A   = D5;
 const uint8_t PIN_ENC_B   = D6;
@@ -14,6 +15,13 @@ Composer   composer(
     0.8f,  // coolEnd:   a 80% ya llegó a su mezcla máxima
     0.35f, // coolMaxShare: a lo sumo 35% del budget se va al frío
     1.6f   // coolGamma: entra suave al principio, más decidido al final
+);
+
+PwmMapper pwmMapper(
+    40,   // pwmWarmMin
+    1023, // pwmWarmMax
+    40,   // pwmCoolMin
+    1023  // pwmCoolMax
 );
 
 void setup() {
@@ -37,14 +45,24 @@ void loop() {
         float normPos = enc.getNormalizedPosition();
         Serial.print("Posicion normalizada: ");
         Serial.println(normPos);
+        
         float brightness = gC.apply(normPos);
         Serial.print("Posicion gamma: ");
         Serial.println(brightness);
+        
         LightMix mix     = composer.compose(brightness);
         Serial.print("Warm: ");
         Serial.print(mix.warm);
         Serial.print(" - Cool: ");
         Serial.println(mix.cool);
+
+        PwmLevels targetPwm = pwmMapper.toPwm(mix);
+        Serial.print("Warm: pwm ");
+        Serial.print(targetPwm.warm);
+        Serial.print(" - Cool pwm: ");
+        Serial.println(targetPwm.cool);
+
+
     }
 
     if (enc.wasClicked()) {
