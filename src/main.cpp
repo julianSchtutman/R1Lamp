@@ -21,10 +21,10 @@ Composer   composer(
 );
 
 PwmMapper pwmMapper(
-    25,   // pwmWarmMin
-    1023, // pwmWarmMax
-    20,   // pwmCoolMin
-    350  // pwmCoolMax
+    0,   // pwmWarmMin
+    4095, // pwmWarmMax
+    0,   // pwmCoolMin
+    4095  // pwmCoolMax
 );
 
 Transition transition(PIN_WARM_PWM, PIN_COOL_PWM, 150);

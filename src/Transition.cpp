@@ -9,6 +9,10 @@ Transition::Transition(uint8_t pinWarm,
 , _durationMs(durationMs)
 , _active(false)
 , _startTime(0)
+, _bits(12)
+, _freq(20000)
+, _chWarm(0)
+, _chCool(1)
 {
     _start   = {0, 0};
     _target  = {0, 0};
@@ -16,10 +20,11 @@ Transition::Transition(uint8_t pinWarm,
 }
 
 void Transition::begin() {
-    pinMode(_pinWarm, OUTPUT);
-    pinMode(_pinCool, OUTPUT);
-    analogWrite(_pinWarm, 0);
-    analogWrite(_pinCool, 0);
+  ledcSetup(_chWarm, _freq, _bits);
+  ledcAttachPin(_pinWarm, _chWarm);
+
+  ledcSetup(_chCool, _freq, _bits);
+  ledcAttachPin(_pinCool, _chCool);
 }
 
 void Transition::setTarget(const PwmLevels& target) {
@@ -96,6 +101,6 @@ PwmLevels Transition::interpolate(float t) const {
 }
 
 void Transition::writePwm(const PwmLevels& v) const {
-    analogWrite(_pinWarm, v.warm);
-    analogWrite(_pinCool, v.cool);
+    ledcWrite(_chWarm, v.warm);
+    ledcWrite(_chCool, v.cool);
 }
