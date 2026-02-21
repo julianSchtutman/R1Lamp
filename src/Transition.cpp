@@ -10,7 +10,7 @@ Transition::Transition(uint8_t pinWarm,
 , _active(false)
 , _startTime(0)
 , _bits(12)
-, _freq(20000)
+, _freq(250)
 , _chWarm(0)
 , _chCool(1)
 {

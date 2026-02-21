@@ -12,16 +12,24 @@ const uint8_t PIN_WARM_PWM = 18;
 const uint8_t PIN_COOL_PWM = 19;  
 
 Encoder enc(PIN_ENC_A, PIN_ENC_B, PIN_BUTTON);  
-GammaCurve gC(2.8f);
+GammaCurve gC(3.6f);
+//Composer   composer(
+//    0.5f,  // coolStart: desde x% de brillo empieza a entrar el frío
+//    0.75f,  // coolEnd:   a x% ya llegó a su mezcla máxima
+//    0.20f, // coolMaxShare: a lo sumo x% del budget se va al frío
+//    2.0f   // coolGamma: entra suave al principio, más decidido al final
+//);
+
+//Solo canal warm
 Composer   composer(
-    0.5f,  // coolStart: desde 40% de brillo empieza a entrar el frío
-    0.75f,  // coolEnd:   a 80% ya llegó a su mezcla máxima
-    0.20f, // coolMaxShare: a lo sumo 35% del budget se va al frío
-    2.0f   // coolGamma: entra suave al principio, más decidido al final
+    1.0f,  
+    1.0f,  
+    0.0f, 
+    2.0f   
 );
 
 PwmMapper pwmMapper(
-    0,   // pwmWarmMin
+    100,   // pwmWarmMin
     4095, // pwmWarmMax
     0,   // pwmCoolMin
     4095  // pwmCoolMax
