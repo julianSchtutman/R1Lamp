@@ -69,17 +69,8 @@ void loop() {
         Serial.print(targetPwm.warm);
         Serial.print(" - Cool pwm: ");
         Serial.println(targetPwm.cool);
-
             
-        // Si cambió el destino, arrancamos una nueva transición
-        static PwmLevels lastTarget = {0, 0};
-        if (targetPwm.warm != lastTarget.warm || targetPwm.cool != lastTarget.cool) {
-          transition.setTarget(targetPwm);
-          lastTarget = targetPwm;
-        }
-
-
-
+        transition.setTarget(targetPwm);        
     }
 
     // Avanzamos la transición según el tiempo
