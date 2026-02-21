@@ -5,11 +5,11 @@
 #include "PwmMapper.h"
 #include "Transition.h"
 
-const uint8_t PIN_ENC_A   = D5;
-const uint8_t PIN_ENC_B   = D6;
-const uint8_t PIN_BUTTON  = D7;
-const uint8_t PIN_WARM_PWM = D1;  
-const uint8_t PIN_COOL_PWM = D2;  
+const uint8_t PIN_ENC_A    = 32;
+const uint8_t PIN_ENC_B    = 33;
+const uint8_t PIN_BUTTON   = 25;
+const uint8_t PIN_WARM_PWM = 18;  
+const uint8_t PIN_COOL_PWM = 19;  
 
 Encoder enc(PIN_ENC_A, PIN_ENC_B, PIN_BUTTON);  
 GammaCurve gC(2.8f);
