@@ -25,7 +25,7 @@ void Encoder::update() {
         uint8_t sum = (lastEncoded << 2) | encoded;
 
         const int32_t MIN_TICKS = 0;
-        const int32_t MAX_POS   = 19;
+        const int32_t MAX_POS   = 10;
         const int32_t MAX_TICKS = MAX_POS * ticksPerClick;
 
         // +1

@@ -12,7 +12,7 @@ const uint8_t PIN_WARM_PWM = 18;
 const uint8_t PIN_COOL_PWM = 19;  
 
 Encoder enc(PIN_ENC_A, PIN_ENC_B, PIN_BUTTON);  
-GammaCurve gC(3.6f);
+GammaCurve gC(2.6f);
 //Composer   composer(
 //    0.5f,  // coolStart: desde x% de brillo empieza a entrar el frío
 //    0.75f,  // coolEnd:   a x% ya llegó a su mezcla máxima
@@ -35,7 +35,7 @@ PwmMapper pwmMapper(
     4095  // pwmCoolMax
 );
 
-Transition transition(PIN_WARM_PWM, PIN_COOL_PWM, 150);
+Transition transition(PIN_WARM_PWM, PIN_COOL_PWM, 800);
 PwmLevels currentPwm = {0, 0};  // estado inicial lógico (opcional)
 
 
