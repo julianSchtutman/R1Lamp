@@ -5,29 +5,37 @@
 #include "PwmMapper.h"
 #include "Transition.h"
 
-const uint8_t PIN_ENC_A   = D5;
-const uint8_t PIN_ENC_B   = D6;
-const uint8_t PIN_BUTTON  = D7;
-const uint8_t PIN_WARM_PWM = D1;  
-const uint8_t PIN_COOL_PWM = D2;  
+const uint8_t PIN_ENC_A    = 32;
+const uint8_t PIN_ENC_B    = 33;
+const uint8_t PIN_BUTTON   = 25;
+const uint8_t PIN_WARM_PWM = 18;  
+const uint8_t PIN_COOL_PWM = 19;  
 
 Encoder enc(PIN_ENC_A, PIN_ENC_B, PIN_BUTTON);  
-GammaCurve gC(2.8f);
+GammaCurve gC(2.6f);
+//Composer   composer(
+//    0.5f,  // coolStart: desde x% de brillo empieza a entrar el frío
+//    0.75f,  // coolEnd:   a x% ya llegó a su mezcla máxima
+//    0.20f, // coolMaxShare: a lo sumo x% del budget se va al frío
+//    2.0f   // coolGamma: entra suave al principio, más decidido al final
+//);
+
+//Solo canal warm
 Composer   composer(
-    0.5f,  // coolStart: desde 40% de brillo empieza a entrar el frío
-    0.75f,  // coolEnd:   a 80% ya llegó a su mezcla máxima
-    0.20f, // coolMaxShare: a lo sumo 35% del budget se va al frío
-    2.0f   // coolGamma: entra suave al principio, más decidido al final
+    1.0f,  
+    1.0f,  
+    0.0f, 
+    2.0f   
 );
 
 PwmMapper pwmMapper(
-    25,   // pwmWarmMin
-    1023, // pwmWarmMax
-    20,   // pwmCoolMin
-    350  // pwmCoolMax
+    100,   // pwmWarmMin
+    4095, // pwmWarmMax
+    0,   // pwmCoolMin
+    4095  // pwmCoolMax
 );
 
-Transition transition(PIN_WARM_PWM, PIN_COOL_PWM, 150);
+Transition transition(PIN_WARM_PWM, PIN_COOL_PWM, 800);
 PwmLevels currentPwm = {0, 0};  // estado inicial lógico (opcional)
 
 
@@ -69,17 +77,8 @@ void loop() {
         Serial.print(targetPwm.warm);
         Serial.print(" - Cool pwm: ");
         Serial.println(targetPwm.cool);
-
             
-        // Si cambió el destino, arrancamos una nueva transición
-        static PwmLevels lastTarget = {0, 0};
-        if (targetPwm.warm != lastTarget.warm || targetPwm.cool != lastTarget.cool) {
-          transition.setTarget(targetPwm);
-          lastTarget = targetPwm;
-        }
-
-
-
+        transition.setTarget(targetPwm);        
     }
 
     // Avanzamos la transición según el tiempo

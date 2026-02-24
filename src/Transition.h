@@ -32,6 +32,10 @@ private:
     uint8_t  _pinWarm;
     uint8_t  _pinCool;
     uint16_t _durationMs;
+    uint16_t _freq;
+    uint8_t  _bits;
+    uint8_t _chWarm;
+    uint8_t _chCool;
 
     bool      _active;      // ¿hay transición en curso?
     uint32_t  _startTime;   // millis() al inicio de la transición
