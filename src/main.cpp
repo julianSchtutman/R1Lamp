@@ -89,5 +89,9 @@ void loop() {
         Serial.println("CLICK!");
     }
 
+    if (enc.wasLongClicked()) {
+        Serial.println("LONG CLICKED!");
+    }
+
     delay(1);
 }

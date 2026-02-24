@@ -57,7 +57,9 @@ void Encoder::update() {
     // ===========================
     //   BOTÓN (DEBOUNCE)
     // ===========================
-    int reading = digitalRead(pinBtn);
+    // ---------- BOTON ----------
+
+bool reading = digitalRead(pinBtn);
 
     if (reading != lastButtonState) {
         lastDebounceTime = millis();
@@ -67,19 +69,39 @@ void Encoder::update() {
         if (reading != buttonState) {
             buttonState = reading;
 
-            // Click detectado cuando pasa a LOW
+            // ----------- PRESIONADO (LOW) -----------
             if (buttonState == LOW) {
-                clickFlag = true;
+                pressStartTimeMs = millis();
             }
-        }
-    }
 
-    lastButtonState = reading;
+            // ----------- LIBERADO (HIGH) -----------
+            else {
+
+                uint32_t pressDuration = millis() - pressStartTimeMs;
+
+                if (pressDuration >= longClickMs) {
+                    longClickFlag = true;
+                } else {
+                    clickFlag = true;
+                }
+            }
+    }
+}
+
+lastButtonState = reading;
 }
 
 bool Encoder::wasClicked() {
     if (clickFlag) {
         clickFlag = false;
+        return true;
+    }
+    return false;
+}
+
+bool Encoder::wasLongClicked() {
+    if (longClickFlag) {
+        longClickFlag = false;
         return true;
     }
     return false;
